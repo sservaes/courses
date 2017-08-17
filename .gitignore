@@ -5,3 +5,8 @@
 .RData
 
 *.db
+Course_Project_2_cache/html/__packages
+*.RData
+*.rdb
+*.rdx
+Course_Project_cache/html/__packages
