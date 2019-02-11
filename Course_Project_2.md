@@ -15,6 +15,8 @@ tooth <- ToothGrowth
 
 ## 2. Summarise the data
 
+First we briefly summarise the data and how this data is constructed.
+
 
 ```r
 # Show how the data is constructed
@@ -29,6 +31,7 @@ str(tooth)
 ```
 
 ```r
+# Make dose a factor variable
 tooth$dose <- as.factor(tooth$dose)
 
 # Provide a basic summary
@@ -48,6 +51,9 @@ tooth %>% group_by(dose, supp) %>% summarise(mean = mean(len), sd = sd(len))
 ## 6      2     VC 26.14 4.797731
 ```
 
+Next we plot the dataset, arranging the data by supp and dose.
+
+
 ```r
 # Plot the dataset
 ggplot(tooth, aes(supp, len)) + 
@@ -57,7 +63,7 @@ ggplot(tooth, aes(supp, len)) +
         ggtitle("The influence of suppository and dose on tooth length")
 ```
 
-![](Course_Project_2_files/figure-html/summary-1.png)<!-- -->
+![](Course_Project_2_files/figure-html/plot-1.png)<!-- -->
 
 ## 3. Test the effect of dose and suppository
 

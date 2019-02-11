@@ -2,27 +2,21 @@
 title: 'Statistical Inference: Course Project Part 1'
 author: "S. Servaes"
 date: "17 August 2017"
-output: 
+output:
+  pdf_document: default
   html_document:
-    keep_md: true
+    keep_md: yes
 ---
 
 ```{r setup, include = FALSE}
 knitr::opts_chunk$set(echo = TRUE, cache = TRUE)
 options(scipen = 999)
+library(ggplot2)
 ```
 
 ## Part 1: Simulation Exercise Instructions
 
-In this project you will investigate the exponential distribution in R and compare it with the Central Limit Theorem. The exponential distribution can be simulated in R with rexp(n, lambda) where lambda is the rate parameter. The mean of exponential distribution is 1/lambda and the standard deviation is also 1/lambda. Set lambda = 0.2 for all of the simulations. You will investigate the distribution of averages of 40 exponentials. Note that you will need to do a thousand simulations.
-
-Illustrate via simulation and associated explanatory text the properties of the distribution of the mean of 40 exponentials. You should
-
-* Show the sample mean and compare it to the theoretical mean of the distribution.
-* Show how variable the sample is (via variance) and compare it to the theoretical variance of the distribution.
-* Show that the distribution is approximately normal.
-
-In point 3, focus on the difference between the distribution of a large collection of random exponentials and the distribution of a large collection of averages of 40 exponentials.
+The project investigates the exponential distribution in R and compares it with the Central Limit Theorem. The project illustrates via simulation and associated explanatory text the properties of the distribution of the mean of 40 exponentials
 
 ### 1. Simulations
 First we will generate the required distributions. One exponential distribution with a lambda of 0.2 containing 1000 samples named `samples` will be generated. Furthermore, a distribution containing 1000 averages of 40 samples from an exponential distribution with a lambda of 0.2, will be generated as well.
@@ -44,7 +38,8 @@ for(i in 1:1000){
 
 ### 2. Sample Mean versus Theoretical Mean.
 
-In order to answer the first question, the means are calculated for the distributions.
+In order to answer the first question, the means are calculated for the distributions.  
+Also a few plots are quickly made
 
 ```{r Question_1}
 # Calculate the means of the 2 distributions
@@ -84,7 +79,9 @@ The simulated means distribution has a mean of `r round(var_mns, 2)`.
 
 ### 3. Distribution.
 
-The code below generates normal distribution with a similar mean and sd to compare to the distribution of the means. Furthermore, it will plot a qqplot of the distribution of the means to assess its normality.
+The code below generates normal distribution with a similar mean and sd to compare to the distribution of the means.
+This distribution will be plotted (dashed line) over the fitted distribution of the means (blue line).
+Furthermore, this code will plot a qqplot of the distribution of the means to assess its normality.
 
 ```{r Question 3}
 # generate a sequence of lenght 100
@@ -94,9 +91,16 @@ xfit <- seq(min(mns), max(mns), length=100)
 yfit <- dnorm(xfit, mean=1/lambda, sd=(1/lambda/sqrt(n)))
 
 # Make a histogram of the means distribution and compare the fit to the normal distribution
-hist(mns, breaks=20, prob = TRUE , xlab = "Means", main = "Density of means", ylab = "Density")
-lines(xfit, yfit, col = "black", lty = 5, lwd = "2")
-lines(density(mns), col = "blue", lwd = "2")
+caption <- "This plot shows the density of the means in 30 different bins. The blue line represents the density, while the black dashed line shows how a perfect normal distribution with mean 1/lambda and an standard deviation of 1/lambda/sqrt(n) would look like."
+caption <- paste(strwrap(caption, 100), sep="", collapse=" \n ")
+
+ggplot(data = as.data.frame(mns), aes(mns)) + 
+        geom_histogram(bins = 30, aes(y = ..density..)) +
+        labs(title = "Density of means", subtitle = caption) +
+        xlab("Means") +
+        ylab("Density") +
+        geom_line(stat = "density", aes(mns), col = "blue", size = 1) +
+        geom_line(data = as.data.frame(xfit), aes(xfit, yfit), linetype = 5)
 
 # Generate a qq plot
 qqnorm(mns, pch = 20, main = "Q-Q plot of means")

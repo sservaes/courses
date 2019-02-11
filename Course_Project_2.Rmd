@@ -2,9 +2,10 @@
 title: 'Statistical Inference: Course Project Part 2'
 author: "S. Servaes"
 date: "17 August 2017"
-output: 
+output:
+  pdf_document: default
   html_document:
-    keep_md: true
+    keep_md: yes
 ---
 
 ```{r setup, include = FALSE}
@@ -24,15 +25,22 @@ tooth <- ToothGrowth
 
 ## 2. Summarise the data
 
+First we briefly summarise the data and how this data is constructed.
+
 ```{r summary}
 # Show how the data is constructed
 str(tooth)
 
+# Make dose a factor variable
 tooth$dose <- as.factor(tooth$dose)
 
 # Provide a basic summary
 tooth %>% group_by(dose, supp) %>% summarise(mean = mean(len), sd = sd(len))
+```
 
+Next we plot the dataset, arranging the data by supp and dose.
+
+``` {r plot}
 # Plot the dataset
 ggplot(tooth, aes(supp, len)) + 
         geom_boxplot(aes(fill = dose)) + 

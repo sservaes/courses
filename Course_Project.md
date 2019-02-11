@@ -37,7 +37,8 @@ for(i in 1:1000){
 
 ### 2. Sample Mean versus Theoretical Mean.
 
-In order to answer the first question, the means are calculated for the distributions.
+In order to answer the first question, the means are calculated for the distributions.  
+Also a few plots are quickly made
 
 
 ```r
@@ -84,7 +85,9 @@ The simulated means distribution has a mean of 0.62.
 
 ### 3. Distribution.
 
-The code below generates normal distribution with a similar mean and sd to compare to the distribution of the means. Furthermore, it will plot a qqplot of the distribution of the means to assess its normality.
+The code below generates normal distribution with a similar mean and sd to compare to the distribution of the means.
+This distribution will be plotted (dashed line) over the fitted distribution of the means (blue line).
+Furthermore, this code will plot a qqplot of the distribution of the means to assess its normality.
 
 
 ```r
@@ -95,9 +98,16 @@ xfit <- seq(min(mns), max(mns), length=100)
 yfit <- dnorm(xfit, mean=1/lambda, sd=(1/lambda/sqrt(n)))
 
 # Make a histogram of the means distribution and compare the fit to the normal distribution
-hist(mns, breaks=20, prob = TRUE , xlab = "Means", main = "Density of means", ylab = "Density")
-lines(xfit, yfit, col = "black", lty = 5, lwd = "2")
-lines(density(mns), col = "blue", lwd = "2")
+caption <- "This plot shows the density of the means in 30 different bins. The blue line represents the density, while the black dashed line shows how a perfect normal distribution with mean 1/lambda and a standard deviation of 1/lambda/sqrt(n) would look like."
+caption <- paste(strwrap(caption, 105), sep="", collapse=" \n ")
+
+ggplot(data = as.data.frame(mns), aes(mns)) + 
+        geom_histogram(bins = 30, aes(y = ..density..)) +
+        labs(title = "Density of means", subtitle = caption) +
+        xlab("Means") +
+        ylab("Density") +
+        geom_line(stat = "density", aes(mns), col = "blue", size = 1) +
+        geom_line(data = as.data.frame(xfit), aes(xfit, yfit), linetype = 5)
 ```
 
 ![](Course_Project_files/figure-html/Question 3-1.png)<!-- -->

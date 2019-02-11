@@ -131,13 +131,15 @@ $(document).ready(function () {
 </div>
 <div id="summarise-the-data" class="section level2">
 <h2>2. Summarise the data</h2>
+<p>First we briefly summarise the data and how this data is constructed.</p>
 <pre class="r"><code># Show how the data is constructed
 str(tooth)</code></pre>
 <pre><code>## 'data.frame':    60 obs. of  3 variables:
 ##  $ len : num  4.2 11.5 7.3 5.8 6.4 10 11.2 11.2 5.2 7 ...
 ##  $ supp: Factor w/ 2 levels &quot;OJ&quot;,&quot;VC&quot;: 2 2 2 2 2 2 2 2 2 2 ...
 ##  $ dose: num  0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 ...</code></pre>
-<pre class="r"><code>tooth$dose &lt;- as.factor(tooth$dose)
+<pre class="r"><code># Make dose a factor variable
+tooth$dose &lt;- as.factor(tooth$dose)
 
 # Provide a basic summary
 tooth %&gt;% group_by(dose, supp) %&gt;% summarise(mean = mean(len), sd = sd(len))</code></pre>
@@ -151,6 +153,7 @@ tooth %&gt;% group_by(dose, supp) %&gt;% summarise(mean = mean(len), sd = sd(len
 ## 4      1     VC 16.77 2.515309
 ## 5      2     OJ 26.06 2.655058
 ## 6      2     VC 26.14 4.797731</code></pre>
+<p>Next we plot the dataset, arranging the data by supp and dose.</p>
 <pre class="r"><code># Plot the dataset
 ggplot(tooth, aes(supp, len)) + 
         geom_boxplot(aes(fill = dose)) + 
